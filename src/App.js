@@ -1,12 +1,9 @@
 import './App.css';
 import { useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux'
+import { combineReducers } from 'redux'
 
 
-const initialState = {
-  entities: [],
-  filter: 'all', //complete , incomplete
-}
 
 
 // ============== refactor de reducers - ini ==============
@@ -46,17 +43,23 @@ export const todosReducer = (state = [], action) => {
   }
 }
 
-
-export const reducer = (state = initialState, action) => {
-
-  //se divide el reducer principal en 2 reducers
-  return {
-    entities: todosReducer(state.entities, action),
-    filter: filterReducer(state.filter, action),
-  }
+export const reducer = combineReducers({
+  //<propiedad del estado> : <el reducer q utilzara para modificarla>
+  entities: todosReducer,
+  filter: filterReducer,
+})
 
 
-}
+// codigo reemplazdo por conbineReducers
+// export const reducer = (state = initialState, action) => {
+//   //se divide el reducer principal en 2 reducers
+//   return {
+//     entities: todosReducer(state.entities, action),
+//     filter: filterReducer(state.filter, action),
+//   }
+// }
+
+
 // ============== refactor de reducers - fin ==============
 
 //Reducer Legacy
