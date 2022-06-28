@@ -4,9 +4,6 @@ import { createStore } from 'redux'
 import './index.css';
 import App from './App';
 
-
-
-
 /* 
 ** renombrar a index.js para ejecutar
 
@@ -33,7 +30,7 @@ const store = createStore((state = 0, action) => {
       return state
   }
 })
-
+ 
 // cada vez q llamemos a dispach de nuestro store se 
 // ejecutara el reducer q le hayamos pasado
 store.dispatch({type: 'accion'})
@@ -48,12 +45,10 @@ console.log(store.getState())
 store.dispatch({type: 'set', payload: 5})
 console.log(store.getState())
 
-
 ReactDOM.render(
   <React.StrictMode>
     <App />
   </React.StrictMode>,
   document.getElementById('root')
 );
-
 

@@ -8,10 +8,7 @@ const initialState = {
   filter: 'all', //complete , incomplete
 }
 
-
-//export const reducer = (state = initialState, action ) =>
-
-
+//Reducer
 export const reducer = (state = initialState, action) => {
   switch (action.type) {
     
@@ -57,7 +54,7 @@ const TodoItem = ( {  todo } ) => {
               color: todo.completed ? '#16A34A': 'white'}
             }
       onClick={() => dispach({ type: 'todo/complete', payload: todo}) }
-    >{todo.title} , {todo.id}</li>
+    >{todo.title} - ID: {todo.id}</li>
   )
 }
 
@@ -101,9 +98,15 @@ const App = () => {
   return (
     <div className="App">
       <form onSubmit={submit}>
-        <input value={valor} onChange={e => setValor(e.target.value)}/>
+        <input 
+          value={valor} 
+          onChange={e => setValor(e.target.value)}
+          placeholder="Ingrese la tarea y presione enter ↩️"
+        />
       </form>
 
+      
+      <h4>Filtros:</h4>
       <button onClick={() => dispatch({type: 'filter/set', payload: 'all'})}>Mostrar Todos</button>
       <button onClick={() => dispatch({type: 'filter/set', payload: 'incomplete'})}>Incompletos</button>
       <button onClick={() => dispatch({type: 'filter/set', payload: 'complete'})}>Completos</button>
