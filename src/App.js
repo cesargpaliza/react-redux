@@ -8,7 +8,59 @@ const initialState = {
   filter: 'all', //complete , incomplete
 }
 
-//Reducer
+
+// ============== refactor de reducers - ini ==============
+
+//propiedad inicial la misma q de initialState
+export const filterReducer = (state= 'all', action) => {
+
+  switch (action.type) {
+    case 'filter/set':
+      return action.payload
+  
+    default:
+      return state
+  }
+
+}
+
+export const todosReducer = (state = [], action) => {
+
+  switch (action.type) {
+    case 'todo/add': {
+      return state.concat({...action.payload}) 
+    }     
+
+    case 'todo/complete': {
+      const newTodos = state.map(todo => {
+        if (todo.id === action.payload.id){
+          return({ ...todo, completed: !todo.completed})
+        }
+        return todo
+      })
+      return newTodos
+    }     
+
+    default: 
+    return state
+  }
+}
+
+
+export const reducer = (state = initialState, action) => {
+
+  //se divide el reducer principal en 2 reducers
+  return {
+    entities: todosReducer(state.entities, action),
+    filter: filterReducer(state.filter, action),
+  }
+
+
+}
+// ============== refactor de reducers - fin ==============
+
+//Reducer Legacy
+/*
 export const reducer = (state = initialState, action) => {
   switch (action.type) {
     
@@ -44,6 +96,7 @@ export const reducer = (state = initialState, action) => {
       return state;
   }
 }
+*/
 
 const TodoItem = ( {  todo } ) => {
   const dispach = useDispatch();
@@ -58,6 +111,8 @@ const TodoItem = ( {  todo } ) => {
   )
 }
 
+
+//funcion creada para ser utilizada en useSelector
 const selectTodos = state => {
   const { entities, filter } = state
 
