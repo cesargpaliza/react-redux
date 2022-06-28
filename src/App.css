@@ -21,7 +21,8 @@ button {
 }
 
 button:hover {
-  background-color: rgb(47, 193, 219);
+  background: rgb(4,173,218);
+  background: linear-gradient(0deg, rgba(4,173,218,1) 0%, rgba(97,218,251,1) 100%);
 }
 
 input {
@@ -32,7 +33,6 @@ input {
   font-size: 20px;
   margin: 5px;
   padding: 5px 5px;
-  margin-top: 20px;
   color: #282c34;
 }
 

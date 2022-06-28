@@ -8,9 +8,7 @@ import { combineReducers } from 'redux'
   la cual recibe next nos servira para llamar al siguiente middleware 
   (en caso de ser necesario) esta funcion recibe como argumento action
 */
-
 export const asyncMiddleware = store => next => action => {
-
   //en el caso que sea una funcion la llama y le pasa el dispatch
   //cdo llamamos a fetchThunk entra por este if
   if(typeof action === 'function'){
@@ -19,23 +17,35 @@ export const asyncMiddleware = store => next => action => {
   next(action)
 }
 
+
+//funciones que devolveran los actions para eviar acoplamiento
+const setPending = () => {
+  return { type: 'todos/pending'  }
+}
+const setFullFilled = payload => {
+  return { type: 'todos/fullfilled', payload, }
+}
+const setError = e => {
+  return { type: 'todos/error', error: e.message}
+}
+const setComplete = payload => {
+  return { type: 'todo/complete', payload}
+}
+const setFilter = payload => {
+  return { type: 'filter/set', payload }
+}
+
+
 export const fetchThunk = () => async dispatch => {
-
-  dispatch({ type: 'todos/pending'})
-
+  dispatch(setPending())
   try {
     const response = await fetch('https://jsonplaceholder.typicode.com/todos')
     const data = await response.json()
     const todos = data.slice(0,10)
-    
-    dispatch({ type: 'todos/fullfilled', payload: todos})
-
+    dispatch(setFullFilled(todos))
   } catch (e) {
-    dispatch({ type: 'todos/error', error: e.message})
-  }
-  
-
-
+    dispatch(setError())
+  }  
 }
 
 export const filterReducer = (state= 'all', action) => {
@@ -65,11 +75,11 @@ export const fetchingReducer = (state = initialFecthing, action) => {
     default: {
       return state
     }
-      
   }
 }
 
 export const todosReducer = (state = [], action) => {
+  
   switch (action.type) {
     //carga todos los datos obtenidos de la api
     case 'todos/fullfilled' : {
@@ -100,8 +110,12 @@ export const reducer = combineReducers({
     status: fetchingReducer,
   }),
   filter: filterReducer,
-
 })
+
+
+
+
+
 
 
 
@@ -123,26 +137,22 @@ const selectTodos = state => {
 const selectStatus = state => state.todos.status
 
 
-
 const TodoItem = ( {  todo } ) => {
   const dispach = useDispatch();
-
   return(
     <li
       style={{textDecoration: todo.completed ? 'line-through': 'none',
               color: todo.completed ? '#16A34A': 'white'}
             }
-      onClick={() => dispach({ type: 'todo/complete', payload: todo}) }
+      onClick={() => dispach(setComplete(todo))}
     >{todo.title} - ID: {todo.id}</li>
   )
 }
 
 const App = () => {
-  const [ valor, setValor ] = useState('')
-  
+  const [ valor, setValor ] = useState('')  
   const dispatch = useDispatch()
 
-  //useSelector: nos sirve para poder seleccionar parte de nuestro estado
   const todos = useSelector(selectTodos)
   const status = useSelector(selectStatus)
 
@@ -164,10 +174,9 @@ const App = () => {
     return <h4>{status.error}</h4>    
   }
 
-
-
   return (
     <div className="App">
+      <h4>Nueva tarea</h4>
       <form onSubmit={submit}>
         <input 
           value={valor} 
@@ -175,15 +184,13 @@ const App = () => {
           placeholder="Ingrese la tarea y presione enter ↩️"
         />
       </form>
-
-      
-      <h4>Filtros:</h4>
-      <button onClick={() => dispatch({type: 'filter/set', payload: 'all'})}>Mostrar Todos</button>
-      <button onClick={() => dispatch({type: 'filter/set', payload: 'incomplete'})}>Incompletos</button>
-      <button onClick={() => dispatch({type: 'filter/set', payload: 'complete'})}>Completos</button>
+      <h4>Filtros</h4>
+      <button onClick={() => dispatch(setFilter('all'))}>Mostrar Todos</button>
+      <button onClick={() => dispatch(setFilter('incomplete'))}>Incompletos</button>
+      <button onClick={() => dispatch(setFilter('complete'))}>Completos</button>
       <button onClick={() => dispatch(fetchThunk())}>Fetch</button>
 
-      <h3>Listado de tareas</h3>
+      <h4>Listado de tareas</h4>
 
       <ul>
         {todos.map(todo =>  <TodoItem key={todo.id} todo={todo}  />)}
