@@ -1,5 +1,6 @@
 import { combineReducers } from 'redux'
-import { makeFetchingReducer, makeSetReducer } from './utils'
+import { makeFetchingReducer, makeSetReducer, reduceReducers } from './utils'
+import { makeCrudReducer } from './utils'
 
 //funciones que devolveran los actions para eviar acoplamiento
 export const setPending = () => {
@@ -40,40 +41,24 @@ export const fetchingReducer = makeFetchingReducer([
 
 export const filterReducer = makeSetReducer(['filter/set'])
 
-  
-  export const todosReducer = (state = [], action) => {
-  
-    switch (action.type) {
-      //carga todos los datos obtenidos de la api
-      case 'todos/fullfilled' : {
-        return action.payload
-      }
-      case 'todo/add': {
-        return state.concat({...action.payload}) 
-      }     
-      case 'todo/complete': {
-        const newTodos = state.map(todo => {
-          if (todo.id === action.payload.id){
-            return({ ...todo, completed: !todo.completed})
-          }
-          return todo
-        })
-        return newTodos
-      }     
-      default: {
-        return state
-      }
-    }
-  }
-  
-  export const reducer = combineReducers({
-    //<propiedad del estado> : <el reducer q utilzara para modificarla>
-    todos: combineReducers({
-      entities: todosReducer, 
-      status: fetchingReducer,
-    }),
-    filter: filterReducer,
-  })
+const fulfilledReducer =  makeSetReducer(['todos/fullfilled'])
+
+const crudReducer = makeCrudReducer(['todo/add', 'todo/complete'])
+
+//reduceReducer 😱
+export const todosReducer = reduceReducers(crudReducer, fulfilledReducer)
+
+
+
+export const reducer = combineReducers({
+  //<propiedad del estado> : <el reducer q utilzara para modificarla>
+  todos: combineReducers({
+    entities: todosReducer, 
+    status: fetchingReducer,
+  }),
+  filter: filterReducer,
+})
+
 
 
 
