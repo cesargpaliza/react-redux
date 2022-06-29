@@ -1,4 +1,5 @@
 import { combineReducers } from 'redux'
+import { makeFetchingReducer, makeSetReducer } from './utils'
 
 //funciones que devolveran los actions para eviar acoplamiento
 export const setPending = () => {
@@ -29,38 +30,16 @@ export const fetchThunk = () => async dispatch => {
     }  
 }
 
-
-
 //reducers
-export const filterReducer = (state= 'all', action) => {
-    switch (action.type) {
-      case 'filter/set':
-        return action.payload
-      default:
-        return state
-    }
-  }
-  
-  /** Se pone un string en loading por que permite manejar varios estados de carga
-   * que a diferencia de true/false solo nos permite 2 */
-  const initialFecthing = { loading: 'idle', error: null}
-  
-  export const fetchingReducer = (state = initialFecthing, action) => {
-    switch (action.type){
-      case 'todos/pending': {
-        return { ...state, loading: 'pending'}
-      }
-      case 'todos/fullfilled': {
-        return { ...state, loading: 'succeded'}
-      }
-      case 'todos/error' : {
-        return { error: action.error, loading: 'rejected'}
-      }
-      default: {
-        return state
-      }
-    }
-  }
+//new
+export const fetchingReducer = makeFetchingReducer([
+    'todos/pending',
+    'todos/fullfilled',
+    'todos/rejected',
+])
+
+export const filterReducer = makeSetReducer(['filter/set'])
+
   
   export const todosReducer = (state = [], action) => {
   
