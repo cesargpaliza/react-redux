@@ -3,7 +3,10 @@ import ReactDOM from 'react-dom';
 import { createStore, applyMiddleware } from 'redux'
 import { Provider } from 'react-redux'
 import './index.css';
-import App, { reducer, asyncMiddleware } from './App';
+import { asyncMiddleware } from './middlewares/async';
+import App from './App';
+import { reducer } from './features/todos';
+
 
 
 //se agrega como segundo argumento la funcion de middleware
