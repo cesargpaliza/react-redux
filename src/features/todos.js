@@ -95,3 +95,22 @@ export const filterReducer = (state= 'all', action) => {
     }),
     filter: filterReducer,
   })
+
+
+
+//funcion creada para ser utilizada en useSelector
+export const selectTodos = state => {
+    const { todos: { entities}, filter } = state
+    
+    if(filter === 'complete'){
+      //retorna solo los todos que estan completos
+      return entities.filter(todo => todo.completed) 
+    }
+    if(filter === 'incomplete'){
+      //retorna solo los todos no que estan completos
+      return entities.filter(todo => !todo.completed) 
+    }
+    return entities
+  }
+  
+  export const selectStatus = state => state.todos.status

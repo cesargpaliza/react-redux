@@ -1,25 +1,10 @@
 import './App.css';
 import { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { fetchThunk, setComplete, setFilter } from './features/todos'
+import { fetchThunk, setComplete, setFilter, selectTodos, selectStatus } from './features/todos'
 
 
-//funcion creada para ser utilizada en useSelector
-const selectTodos = state => {
-  const { todos: { entities}, filter } = state
-  
-  if(filter === 'complete'){
-    //retorna solo los todos que estan completos
-    return entities.filter(todo => todo.completed) 
-  }
-  if(filter === 'incomplete'){
-    //retorna solo los todos no que estan completos
-    return entities.filter(todo => !todo.completed) 
-  }
-  return entities
-}
 
-const selectStatus = state => state.todos.status
 
 
 const TodoItem = ( {  todo } ) => {
