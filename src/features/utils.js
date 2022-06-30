@@ -76,3 +76,13 @@ export const mac = (type, ...argNames) =>
     })
     return action
 }
+
+/*
+    mat make action tipes
+    recibe el nombre de la entidad y retorna el nombre de las acciones
+*/
+export const mat = entity => ([
+    `${entity}/pending`,
+    `${entity}/fullfilled`, //en realidad es fulfilled
+    `${entity}/rejected`,
+])

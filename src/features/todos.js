@@ -1,9 +1,9 @@
 import { combineReducers } from 'redux'
 import { makeFetchingReducer, makeSetReducer, reduceReducers } from './utils'
-import { mac, makeCrudReducer } from './utils'
+import { mac, mat, makeCrudReducer } from './utils'
 
-
-
+//mat = make async tipes
+const asyncTodos = mat('todos')
 
 
 
@@ -48,12 +48,19 @@ export const fetchThunk = () => async dispatch => {
 }
 
 //reducers
-//new
-export const fetchingReducer = makeFetchingReducer([
-    'todos/pending',
-    'todos/fullfilled',
-    'todos/rejected',
-])
+/*
+ Cada vez q realizamos una peticion tendremos los mismos 3 estados
+ pending / fulfilled / rejectes, con lo cual nos conviene realizar 
+ una funcion que nos devuelva estos 3 estados a partir de la entidad
+*/
+export const fetchingReducer = makeFetchingReducer(asyncTodos)
+
+
+// export const fetchingReducer = makeFetchingReducer([
+//     'todos/pending',
+//     'todos/fullfilled',
+//     'todos/rejected',
+// ])
 
 export const filterReducer = makeSetReducer(['filter/set'])
 
