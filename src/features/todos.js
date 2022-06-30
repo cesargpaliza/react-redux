@@ -1,11 +1,24 @@
 import { combineReducers } from 'redux'
 import { makeFetchingReducer, makeSetReducer, reduceReducers } from './utils'
-import { makeCrudReducer } from './utils'
+import { mac, makeCrudReducer } from './utils'
+
+
+
+
+
 
 //funciones que devolveran los actions para eviar acoplamiento
+export const setPending = mac('todos/pending')
+export const setFullFilled = mac('todos/fullfilled', 'payload' )
+export const setError = mac('todos/error', 'error')
+export const setComplete = mac('todo/complete', 'payload')
+export const setFilter = mac('filter/set', 'payload')
+
+
+/* deprecated
 export const setPending = () => {
     return { type: 'todos/pending'  }
-}
+} 
 export const setFullFilled = payload => {
     return { type: 'todos/fullfilled', payload, }
 }
@@ -18,6 +31,9 @@ export const setComplete = payload => {
 export const setFilter = payload => {
     return { type: 'filter/set', payload }
 }
+*/
+
+
 
 export const fetchThunk = () => async dispatch => {
     dispatch(setPending())
@@ -27,7 +43,7 @@ export const fetchThunk = () => async dispatch => {
         const todos = data.slice(0,10)
         dispatch(setFullFilled(todos))
     } catch (e) {
-        dispatch(setError())
+        dispatch(setError(e.message))
     }  
 }
 
@@ -48,8 +64,6 @@ const crudReducer = makeCrudReducer(['todo/add', 'todo/complete'])
 //reduceReducer 😱
 export const todosReducer = reduceReducers(crudReducer, fulfilledReducer)
 
-
-
 export const reducer = combineReducers({
   //<propiedad del estado> : <el reducer q utilzara para modificarla>
   todos: combineReducers({
@@ -58,7 +72,6 @@ export const reducer = combineReducers({
   }),
   filter: filterReducer,
 })
-
 
 
 

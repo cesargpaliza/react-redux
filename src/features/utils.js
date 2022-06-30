@@ -61,3 +61,18 @@ export const makeCrudReducer = actions => (state = [], action) => {
       }
     }
   }
+
+
+/*
+    make action creator
+    recibe el tipo de accion y los argumentos correspondientes
+*/
+export const mac = (type, ...argNames) => 
+(...args) => {
+    const action =  { type } //se agrega el tipo
+    argNames.forEach((argumento, index) => {
+        //se le agrega las propiedades
+        action[argNames[index]] = args[index]
+    })
+    return action
+}
