@@ -1,16 +1,22 @@
 import { combineReducers } from 'redux'
 import { makeFetchingReducer, makeSetReducer, reduceReducers } from './utils'
-import { mac, mat, makeCrudReducer } from './utils'
+import { mac, mat, makeCrudReducer, asyncMac } from './utils'
 
 //mat = make async tipes
 const asyncTodos = mat('todos')
 
+//llamo la funcion con los nombres de las acciones obtenidas por mat
+const [setPending, setFullFilled, setError] = asyncMac(asyncTodos)
 
 
-//funciones que devolveran los actions para eviar acoplamiento
-export const setPending = mac('todos/pending')
-export const setFullFilled = mac('todos/fullfilled', 'payload' )
-export const setError = mac('todos/error', 'error')
+//action repetitivos q se necesitaran en todas las peticiones
+//seran reemplazados por una funcion
+// export const setPending = mac('todos/pending')
+// export const setFullFilled = mac('todos/fullfilled', 'payload' )
+// export const setError = mac('todos/error', 'error')
+
+
+
 export const setComplete = mac('todo/complete', 'payload')
 export const setFilter = mac('filter/set', 'payload')
 

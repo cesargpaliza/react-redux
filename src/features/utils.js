@@ -86,3 +86,13 @@ export const mat = entity => ([
     `${entity}/fullfilled`, //en realidad es fulfilled
     `${entity}/rejected`,
 ])
+
+/*
+    funcion q recibe un objeto y le asigna los nombres de las acciones
+    obtenidos de mac
+*/
+export const asyncMac = asyncTypes => ([
+    mac(asyncTypes[0]),
+    mac(asyncTypes[1], 'payload'),
+    mac(asyncTypes[2], 'error'),
+])
